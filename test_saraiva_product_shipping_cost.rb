@@ -2,7 +2,7 @@ require 'watir-webdriver'
 require 'test-unit'
 
 # TEST SUITE
-class SaraivaCart < Test::Unit::TestCase
+class TestSaraivaProductShippingCost < Test::Unit::TestCase
 
 	class << self
 		def startup
