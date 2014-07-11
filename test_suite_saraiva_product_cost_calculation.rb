@@ -4,20 +4,69 @@ require 'test-unit'
 # TEST SUITE
 class TestSuiteSaraivaProductCostCalculation < Test::Unit::TestCase
 
-	b = Watir::Browser.start 'saraiva.com.br'
-	b.div(:class => 'product').link.click
-	b.link(:class => 'botaoComprar').click
-	b.text_field(:name => 'CEP').set '89010020'
-	b.button(:name => 'btnCalcFrete').click
 
-	preco = b.td(:class => 'itens_valor').text
-	preco.gsub!("R$ ","")
-	preco.gsub!("  ","")
-	preco.gsub!(",",".")
-	preco.to_f
+	class << self
+		def startup
+			@@browser = Watir::Browser.start 'saraiva.com.br'
+		end
 
-	puts 'preço do produto: ' + preco
+		def shutdown
+			@@browser.close
+		end
+	end
 
-	puts 'preço do frete: ' + b.td(:class => 'frete_valor').text
+	# HELPERS
+	def select_a_product
+		@@browser.div(:class => 'product').link.click
+		puts 'Product title: ' << @@browser.title
+	end
 
+	def click_buy_button
+		@@browser.link(:class => 'botaoComprar').click
+	end
+
+	def set_zip_code zip_code
+		@@browser.text_field(:name => 'CEP').set zip_code	
+	end
+
+	def click_shipping_calc_button
+		@@browser.button(:name => 'btnCalcFrete').click
+	end
+
+	def shipping_price
+		@@browser.tds(:class => 'frete_valor').each do |td|
+			@shipping_price = td.text if td.text['R$'] != nil
+			end
+		remove_money_characters_and_return_float @shipping_price
+	end
+
+	def remove_money_characters_and_return_float price
+		price.gsub!("R$ ","").gsub!("  ","").gsub!(",",".").to_f
+	end
+
+	def total_order_price_from_site
+		@@browser.tds(:class => 'quantidade').each do |td|
+			@total_price = td.text if td.text['R$'] != nil
+			end
+		remove_money_characters_and_return_float @total_price
+	end
+
+	# TEST CASES
+	def test_check_shipping_cost
+		select_a_product
+		click_buy_button
+		set_zip_code '88062000'
+		click_shipping_calc_button
+		price = product_price_from_site
+		
+		assert_not_equal price, 0
+		
+		puts 'Product price: ' + product_price_from_site.to_s
+		puts 'Shiping cost: ' + shipping_price.to_s
+		
+		total_price = product_price_from_site + shipping_price
+		puts 'Sum: ' << total_price.to_s
+		
+		assert_equal total_price.round(1), total_order_price_from_site 
+	end
 end
