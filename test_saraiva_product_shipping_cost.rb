@@ -49,6 +49,13 @@ class SaraivaCart < Test::Unit::TestCase
 		price.gsub!("R$ ","").gsub!("  ","").gsub!(",",".").to_f
 	end
 
+	def total_order_price_from_site
+		@@browser.tds(:class => 'quantidade').each do |td|
+			@total_price = td.text if td.text['R$'] != nil
+			end
+		remove_money_characters_and_return_float @total_price
+	end
+
 	# TEST CASES
 	def test_check_shipping_cost
 		select_a_product
@@ -58,8 +65,13 @@ class SaraivaCart < Test::Unit::TestCase
 		price = product_price_from_site
 		
 		assert_not_equal price, 0
-		puts 'Product price: ' + product_price_from_site
-		puts 'Shiping cost: ' + shipping_price
-		puts 'Sum: ' << (product_price_from_site + shipping_price)
+		
+		puts 'Product price: ' + product_price_from_site.to_s
+		puts 'Shiping cost: ' + shipping_price.to_s
+		
+		total_price = product_price_from_site + shipping_price
+		puts 'Sum: ' << total_price.to_s
+		
+		assert_equal total_price.round 1, total_order_price_from_site 
 	end
 end
