@@ -72,6 +72,6 @@ class SaraivaCart < Test::Unit::TestCase
 		total_price = product_price_from_site + shipping_price
 		puts 'Sum: ' << total_price.to_s
 		
-		assert_equal total_price.round 1, total_order_price_from_site
+		assert_equal total_price.round 1, total_order_price_from_site 
 	end
 end
