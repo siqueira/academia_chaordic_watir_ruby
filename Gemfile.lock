@@ -3,8 +3,20 @@ GEM
   specs:
     childprocess (0.5.3)
       ffi (~> 1.0, >= 1.0.11)
+    data_magic (0.19)
+      faker (>= 1.1.2)
+      yml_reader (>= 0.3)
+    faker (1.4.1)
+      i18n (~> 0.5)
     ffi (1.9.3)
+    i18n (0.6.11)
     multi_json (1.10.1)
+    page-object (1.0)
+      page_navigation (>= 0.9)
+      selenium-webdriver (>= 2.42.0)
+      watir-webdriver (>= 0.6.9)
+    page_navigation (0.9)
+      data_magic (>= 0.14)
     rubyzip (1.1.6)
     selenium-webdriver (2.42.0)
       childprocess (>= 0.5.0)
@@ -15,10 +27,12 @@ GEM
     watir-webdriver (0.6.10)
       selenium-webdriver (>= 2.18.0)
     websocket (1.0.7)
+    yml_reader (0.3)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  page-object
   test-unit
   watir-webdriver
