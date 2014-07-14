@@ -6,12 +6,12 @@ require_relative './page/saraiva.rb'
 
 # TEST SUITE
 class TestSaraivaProductShippingCost < Test::Unit::TestCase
-	include PageObject
 
 	class << self
 		def startup
-			@@browser = Watir::Browser.start 'saraiva.com.br'
-			@@saraiva = Saraiva.new
+			@@browser = Watir::Browser.new :firefox
+			@@saraiva = Saraiva.new @@browser
+			@@saraiva.goto
 		end
 
 		def shutdown
@@ -22,7 +22,7 @@ class TestSaraivaProductShippingCost < Test::Unit::TestCase
 
 	# HELPERS
 	def select_a_product
-		@@saraiva.product.link.click
+		@@saraiva.product_element.link.click
 		puts 'Product title: ' << @@browser.title
 	end
 

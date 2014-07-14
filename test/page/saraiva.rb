@@ -6,7 +6,7 @@ class Saraiva
 	page_url 'saraiva.com.br'
 
 	# HOME PAGE
-	div :product. :class => 'product'
+	div :product, :class => 'product'
 
 	# PRODUCT PAGE
 	link :buy_link, :class => 'botaoComprar'
